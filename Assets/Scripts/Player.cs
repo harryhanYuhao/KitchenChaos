@@ -19,9 +19,25 @@ public class Player : MonoBehaviour
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         Vector3 moveDir = new Vector3(inputVector.x, 0, inputVector.y);
-        transform.position += moveDir * Time.deltaTime * moveSpeed;
 
-        isWalking =  moveDir != Vector3.zero;
+        float moveDistance = Time.deltaTime * moveSpeed; 
+        float playerHeight = 2f;
+        float playerRadius = 0.7f;
+
+        bool canMoveX = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, new Vector3(moveDir.x, 0 ,0), moveDistance);
+        bool canMoveZ = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, new Vector3(0, 0 ,moveDir.z), moveDistance);
+        
+        if (canMoveX){
+            Vector3 direction = new Vector3(moveDir.x, 0 ,0);
+            transform.position += direction * Time.deltaTime * moveSpeed; 
+        }      
+        if (canMoveZ){
+            Vector3 direction = new Vector3(0, 0 ,moveDir.z);
+            transform.position += direction * Time.deltaTime * moveSpeed; 
+        }
+
+        isWalking = (canMoveX || canMoveZ) && moveDir != Vector3.zero;
+
         float RotationSpeed = 10f;
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * RotationSpeed);
     }
