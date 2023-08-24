@@ -9,7 +9,8 @@ public class PlayerAnimator : MonoBehaviour
     private Player player;
     private Animator animator;
 
-    private void Awake(){
+    private void Awake()
+    {
         player = GameObject.Find("Player").GetComponent<Player>();
         animator = GameObject.Find("PlayerVisual").GetComponent<Animator>();
         animator.SetBool(IS_WALKING, player.IsWalking());
@@ -18,7 +19,6 @@ public class PlayerAnimator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-    
     }
 
     // Update is called once per frame
