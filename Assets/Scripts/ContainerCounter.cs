@@ -1,42 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UI;
 using UnityEngine;
 
-public class ContainerCounter : MonoBehaviour, IKitchenObjectParent {
+public class ContainerCounter : BaseCounter{
     [SerializeField]
     private KitchenObjectSO kitchenObjectSO;
-    [SerializeField]
-    private Transform counterTopPoint;
 
-    private KitchenObject kitchenObject;
-    // Start is called before the first frame update
-    void Start() {}
+    private Animator animator;
 
-    // Update is called once per frame
-    void Update() {}
-    public void Interact(Player player) {
-        // Debug.Log("ClearCounter Interact");
-        if (kitchenObject == null) {
+    private void Awake()
+    {
+        this.kitchenObject = null;
+        // find the visual game object
+        GameObject visual = gameObject.transform.Find("ContainerCounter_Visual").gameObject;
+        animator = visual.GetComponent<Animator>();
+        Debug.Log(visual);
+        Debug.Log(animator);
+    }
+    public override void Interact(Player player) {
+        // Debug.Log("Container Interact");
+        if (!player.HasKitchenObject()) {
             Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab, counterTopPoint);
             kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
-            kitchenObject.SetKitchenObjectParent(this);
-        } else {
-            // give object to player
-            if (!player.HasKitchenObject()) {
-                player.SetKitchenObject(kitchenObject);
-                kitchenObject.SetKitchenObjectParent(player);
-            }
-        }
+            kitchenObject.SetKitchenObjectParent(player);
+            
+            // visual
+            animator.SetTrigger("OpenClose");
+        } 
     }
-    public Transform GetKitchenObjectFollowTransform() { return counterTopPoint; }
-
-    public bool HasKitchenObject() { return kitchenObject != null; }
-
-    public void ClearKitchenObject() { kitchenObject = null; }
-
-    public void SetKitchenObject(KitchenObject kitchenObject) {
-        this.kitchenObject = kitchenObject;
-    }
-
-    public KitchenObject GetKitchenObject() { return kitchenObject; }
 }

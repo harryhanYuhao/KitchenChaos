@@ -12,10 +12,6 @@ public class KitchenObject : MonoBehaviour {
 
     private void Awake() { this.kitchenObjectParent = null; }
     // Start is called before the first frame update
-    void Start() {}
-
-    // Update is called once per frame
-    void Update() {}
 
     public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent) {
         if (this.kitchenObjectParent != null) {

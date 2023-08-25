@@ -14,9 +14,6 @@ public class PlayerAnimator : MonoBehaviour {
         animator.SetBool(IS_WALKING, player.IsWalking());
     }
 
-    // Start is called before the first frame update
-    void Start() {}
-
     // Update is called once per frame
     void Update() { animator.SetBool(IS_WALKING, player.IsWalking()); }
 }
