@@ -27,10 +27,10 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
 
     private void Start() {
         gameInput.OnInteractAction += GameInput_OnInteractAction;
-        kitchenObject = null;
     }
 
     private void Awake() {
+        this.kitchenObject = null;
         lastInteractDir = Vector3.zero;
         selectedCounter = null;
         if (Instance != null) {

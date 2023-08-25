@@ -10,12 +10,13 @@ public class ClearCounter : BaseCounter {
 
     public override void Interact(Player player) {
         // Debug.Log("ClearCounter Interact");
-        if (player.HasKitchenObject()) {
-            this.SetKitchenObject(player.GetKitchenObject());
-            kitchenObject.SetKitchenObjectParent(this);
-        } else if (this.HasKitchenObject())
+        if (!player.HasKitchenObject() && this.HasKitchenObject())
         {
             kitchenObject.SetKitchenObjectParent(player); 
         }
+        else if (player.HasKitchenObject() && !this.HasKitchenObject())
+        {
+            player.GetKitchenObject().SetKitchenObjectParent(this);
+        } 
     }
 }
