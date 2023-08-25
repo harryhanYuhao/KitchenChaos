@@ -6,6 +6,7 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent{
     protected KitchenObject kitchenObject;
 
     [SerializeField] protected Transform counterTopPoint;
+    protected virtual void Awake() { this.kitchenObject = null; }
     public virtual void Interact(Player player) {
         Debug.LogWarning("BaseCounter Interact");
     }
