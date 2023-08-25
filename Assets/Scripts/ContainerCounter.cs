@@ -2,22 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour, IKitchenObjectParent {
+public class ContainerCounter : MonoBehaviour, IKitchenObjectParent {
     [SerializeField]
     private KitchenObjectSO kitchenObjectSO;
     [SerializeField]
     private Transform counterTopPoint;
 
     private KitchenObject kitchenObject;
-
-    private void Awake() { this.kitchenObject = null; }
-
     // Start is called before the first frame update
     void Start() {}
 
     // Update is called once per frame
     void Update() {}
-
     public void Interact(Player player) {
         // Debug.Log("ClearCounter Interact");
         if (kitchenObject == null) {
@@ -32,7 +28,6 @@ public class ClearCounter : MonoBehaviour, IKitchenObjectParent {
             }
         }
     }
-
     public Transform GetKitchenObjectFollowTransform() { return counterTopPoint; }
 
     public bool HasKitchenObject() { return kitchenObject != null; }

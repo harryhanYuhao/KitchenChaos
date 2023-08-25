@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IKitchenObjectParent
-{
+public interface IKitchenObjectParent {
     public bool HasKitchenObject();
 
     public void ClearKitchenObject();

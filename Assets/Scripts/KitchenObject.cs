@@ -2,37 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KitchenObject : MonoBehaviour
-{
-
+public class KitchenObject : MonoBehaviour {
     [SerializeField]
     private KitchenObjectSO kitchenObjectSO;
 
     private IKitchenObjectParent kitchenObjectParent;
 
-    public KitchenObjectSO GetKichenObjectSO()
-    {
-        return kitchenObjectSO;
-    }
+    public KitchenObjectSO GetKichenObjectSO() { return kitchenObjectSO; }
 
-    private void Awake()
-    {
-        this.kitchenObjectParent = null;
-    }
+    private void Awake() { this.kitchenObjectParent = null; }
     // Start is called before the first frame update
-    void Start()
-    {
-    }
+    void Start() {}
 
     // Update is called once per frame
-    void Update()
-    {
-    }
+    void Update() {}
 
-    public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent)
-    {
-        if (this.kitchenObjectParent != null)
-        {
+    public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent) {
+        if (this.kitchenObjectParent != null) {
             this.kitchenObjectParent.ClearKitchenObject();
         }
         this.kitchenObjectParent = kitchenObjectParent;
@@ -41,8 +27,5 @@ public class KitchenObject : MonoBehaviour
         transform.localPosition = Vector3.zero;
     }
 
-    public IKitchenObjectParent GetKitchenObjectParent()
-    {
-        return kitchenObjectParent;
-    }
+    public IKitchenObjectParent GetKitchenObjectParent() { return kitchenObjectParent; }
 }
