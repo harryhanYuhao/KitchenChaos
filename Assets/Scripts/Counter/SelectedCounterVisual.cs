@@ -6,11 +6,10 @@ public class SelectedCounterVisual : MonoBehaviour {
     [SerializeField]
     private BaseCounter baseCounter;
     [SerializeField]
-    private GameObject [] visualGameObjectArray;
+    private GameObject[] visualGameObjectArray;
     // Start is called before the first frame update
 
-    private void Awake()
-    {
+    private void Awake() {
         Debug.Log(this.name + "init");
         if (this.transform.parent == null) Debug.LogError("parent is null");
         Debug.Log(this.name + "'s parent is: " + this.transform.parent.name);
@@ -32,13 +31,13 @@ public class SelectedCounterVisual : MonoBehaviour {
         }
     }
 
-    private void show() { 
+    private void show() {
         foreach (GameObject visualGameObject in visualGameObjectArray)
-            visualGameObject.SetActive(true); 
+            visualGameObject.SetActive(true);
     }
 
-    private void hide() { 
+    private void hide() {
         foreach (GameObject visualGameObject in visualGameObjectArray)
-            visualGameObject.SetActive(false); 
+            visualGameObject.SetActive(false);
     }
 }

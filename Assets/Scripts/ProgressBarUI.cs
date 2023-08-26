@@ -5,40 +5,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProgressBarUI : MonoBehaviour
-{
-    [SerializeField] private Image barImage;
+public class ProgressBarUI : MonoBehaviour {
+    [SerializeField]
+    private Image barImage;
     // shall be the parent cutting counter
-    [SerializeField] private CuttingCounter cuttingCounter;
+    [SerializeField]
+    private CuttingCounter cuttingCounter;
 
-    private void Start()
-    {
+    private void Start() {
         cuttingCounter.OnProgressChanged += CuttingCounter_OnProgressChanged;
         barImage.fillAmount = 0f;
         Hide();
     }
-    
-    private void CuttingCounter_OnProgressChanged(object sender, CuttingCounter.OnProgressChangedEventArgs e)
-    {
+
+    private void CuttingCounter_OnProgressChanged(object sender,
+                                                  CuttingCounter.OnProgressChangedEventArgs e) {
         barImage.fillAmount = e.progressNormalized;
-        if (e.progressNormalized == 0f || e.progressNormalized == 1f)
-        {
+        if (e.progressNormalized == 0f || e.progressNormalized == 1f) {
             Hide();
-        }
-        else
-        {
+        } else {
             Show();
         }
     }
 
-    private void Show()
-    {
-        gameObject.SetActive(true);
-    }
-    
-    
-    private void Hide()
-    {
-        gameObject.SetActive(false);
-    }
+    private void Show() { gameObject.SetActive(true); }
+
+    private void Hide() { gameObject.SetActive(false); }
 }

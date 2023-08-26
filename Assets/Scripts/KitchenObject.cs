@@ -9,8 +9,7 @@ public class KitchenObject : MonoBehaviour {
     private int cutTimes = 0;
     private int cookedTimes = 0;
 
-    private void Awake()
-    {
+    private void Awake() {
         this.kitchenObjectParent = null;
         Debug.Log("KitchenObject Awake");
     }
@@ -25,8 +24,7 @@ public class KitchenObject : MonoBehaviour {
         transform.localPosition = Vector3.zero;
     }
 
-    public void DestroySelf()
-    {
+    public void DestroySelf() {
         kitchenObjectParent.ClearKitchenObject();
         Destroy(gameObject);
     }
@@ -34,12 +32,12 @@ public class KitchenObject : MonoBehaviour {
     public IKitchenObjectParent GetKitchenObjectParent() { return kitchenObjectParent; }
     public KitchenObjectSO GetKitchenObjectSO() { return kitchenObjectSO; }
 
-    public static GameObject SpawnKitchenObject(KitchenObjectSO inSO, IKitchenObjectParent parent)
-    {
-            GameObject kitchenObjectGO = Instantiate(inSO.prefab, parent.GetKitchenObjectFollowTransform());
-            var kitchenObject = kitchenObjectGO.GetComponent<KitchenObject>();
-            kitchenObject.SetKitchenObjectParent(parent);
-            kitchenObject.kitchenObjectSO = inSO;
-            return kitchenObjectGO;
+    public static GameObject SpawnKitchenObject(KitchenObjectSO inSO, IKitchenObjectParent parent) {
+        GameObject kitchenObjectGO =
+            Instantiate(inSO.prefab, parent.GetKitchenObjectFollowTransform());
+        var kitchenObject = kitchenObjectGO.GetComponent<KitchenObject>();
+        kitchenObject.SetKitchenObjectParent(parent);
+        kitchenObject.kitchenObjectSO = inSO;
+        return kitchenObjectGO;
     }
 }

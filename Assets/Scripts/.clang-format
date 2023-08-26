@@ -5,4 +5,5 @@ BreakBeforeBraces: Attach
 AllowShortIfStatementsOnASingleLine: true
 IndentCaseLabels: false
 ColumnLimit: 100
+BreakAfterAttributes: Never
 

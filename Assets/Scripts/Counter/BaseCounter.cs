@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseCounter : MonoBehaviour, IKitchenObjectParent{
+public class BaseCounter : MonoBehaviour, IKitchenObjectParent {
     protected KitchenObject kitchenObject;
 
-    [SerializeField] protected Transform counterTopPoint;
+    [SerializeField]
+    protected Transform counterTopPoint;
 
     // CounterInit shall be called for all objects inheriting from BaseCounter
     // Place it in Awake()
-    protected void CounterInit()
-    {
-        Debug.Log(name+"init");
-        this.kitchenObject = null; 
+    protected void CounterInit() {
+        Debug.Log(name + "init");
+        this.kitchenObject = null;
         // automatically set counter top point
         counterTopPoint = gameObject.transform.Find("CounterTopPoint");
         if (counterTopPoint == null) {
@@ -21,14 +21,9 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent{
         }
     }
 
-    protected virtual void Awake()
-    {
-        this.CounterInit();
-    }
+    protected virtual void Awake() { this.CounterInit(); }
 
-    public virtual void Interact(Player player) {
-        Debug.LogWarning("BaseCounter Interact");
-    }
+    public virtual void Interact(Player player) { Debug.LogWarning("BaseCounter Interact"); }
     public virtual void InteractAlternate(Player player) {
         Debug.LogWarning("BaseCounter Interact Alternate");
     }

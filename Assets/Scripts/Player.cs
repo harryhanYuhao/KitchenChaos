@@ -5,12 +5,8 @@ using Unity.VisualScripting;
 using UnityEditor.UI;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IKitchenObjectParent
-{
-    public static Player Instance
-    {
-        get; private set;
-    }
+public class Player : MonoBehaviour, IKitchenObjectParent {
+    public static Player Instance { get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs {
         public BaseCounter selectedCounter;
@@ -27,7 +23,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private Transform playerHoldPoint;
 
     public GameObject tomato;
-    
+
     public bool isWalking;
     private Vector3 lastInteractDir;
     private BaseCounter selectedCounter;
@@ -38,13 +34,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent
         gameInput.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
 
-    private void InitCheck()
-    {
+    private void InitCheck() {
         if (gameInput == null) Debug.LogError("gameInput not found");
         if (playerHoldPoint == null) Debug.LogError("playerHoldPoint not found");
     }
-    private void Awake()
-    {
+    private void Awake() {
         Debug.Log(this.name + "init");
         InitCheck();
         this.kitchenObject = null;
