@@ -5,13 +5,15 @@ using UnityEngine;
 public class KitchenObject : MonoBehaviour {
     [SerializeField]
     private KitchenObjectSO kitchenObjectSO;
-
     private IKitchenObjectParent kitchenObjectParent;
+    private int cutTimes = 0;
+    private int cookedTimes = 0;
 
-    public KitchenObjectSO GetKichenObjectSO() { return kitchenObjectSO; }
-
-    private void Awake() { this.kitchenObjectParent = null; }
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        this.kitchenObjectParent = null;
+        Debug.Log("KitchenObject Awake");
+    }
 
     public void SetKitchenObjectParent(IKitchenObjectParent kitchenObjectParent) {
         if (this.kitchenObjectParent != null) {
@@ -23,5 +25,21 @@ public class KitchenObject : MonoBehaviour {
         transform.localPosition = Vector3.zero;
     }
 
+    public void DestroySelf()
+    {
+        kitchenObjectParent.ClearKitchenObject();
+        Destroy(gameObject);
+    }
+
     public IKitchenObjectParent GetKitchenObjectParent() { return kitchenObjectParent; }
+    public KitchenObjectSO GetKitchenObjectSO() { return kitchenObjectSO; }
+
+    public static GameObject SpawnKitchenObject(KitchenObjectSO inSO, IKitchenObjectParent parent)
+    {
+            GameObject kitchenObjectGO = Instantiate(inSO.prefab, parent.GetKitchenObjectFollowTransform());
+            var kitchenObject = kitchenObjectGO.GetComponent<KitchenObject>();
+            kitchenObject.SetKitchenObjectParent(parent);
+            kitchenObject.kitchenObjectSO = inSO;
+            return kitchenObjectGO;
+    }
 }

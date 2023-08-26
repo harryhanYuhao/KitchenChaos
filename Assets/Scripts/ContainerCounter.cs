@@ -2,38 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.UI;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 public class ContainerCounter : BaseCounter{
     [SerializeField]
     private KitchenObjectSO kitchenObjectSO;
 
-    private Animator animator;
-    private GameObject objectSprite;
+    private Animator openCloseAnimator;
+    // private GameObject objectSprite;
 
-    private void Awake()
+    protected override void Awake()
     {
-        this.kitchenObject = null;
+        this.CounterInit();
+        if (kitchenObjectSO == null) Debug.LogError("kitchenObjectSO not found");
         // find the visual game object
         GameObject visual = gameObject.transform.Find("ContainerCounter_Visual").gameObject;
-        animator = visual.GetComponent<Animator>();
-        Debug.Log(visual);
-        Debug.Log(animator);
+        if (visual == null) Debug.LogError("ContainerCounter_Visual not found");
+        
+        openCloseAnimator = visual.GetComponent<Animator>();
+        if (openCloseAnimator == null) Debug.LogError("animator not found"); 
+        
         // Automatically set the sprite based on the kitchenObjectSO
         GameObject tmp = visual.transform.Find("Single door").gameObject;
-        objectSprite = tmp.transform.Find("ObjectSprite").gameObject;
+        if (tmp == null) Debug.LogError("Single door not found");
+            
+        var objectSprite = tmp.transform.Find("ObjectSprite").gameObject;
+        if (objectSprite == null) Debug.LogError("ObjectSprite not found");
+        
         var SpriteRenderer = objectSprite.GetComponent<SpriteRenderer>();
+        if (SpriteRenderer == null) Debug.LogError("SpriteRenderer not found");
+
+        if (kitchenObjectSO.sprite == null) Debug.LogError("kitchenObjectSO.sprite not found");
+        if (SpriteRenderer.sprite == null) Debug.LogError("SpriteRenderer.sprite not found");
         SpriteRenderer.sprite = kitchenObjectSO.sprite;
-        Debug.Log(SpriteRenderer);
+        
+        // in Interact the kitchonObject so must have a prefab attached
+        if (kitchenObjectSO.prefab == null) Debug.LogError("kitchenObjectSO.prefab not found");
     }
     public override void Interact(Player player) {
         // Debug.Log("Container Interact");
         if (!player.HasKitchenObject()) {
-            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab, counterTopPoint);
-            kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
-            kitchenObject.SetKitchenObjectParent(player);
-            
+            KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
             // visual
-            animator.SetTrigger("OpenClose");
+            openCloseAnimator.SetTrigger("OpenClose");
         } 
     }
 }
