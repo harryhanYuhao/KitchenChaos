@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter {
+public class CuttingCounter : BaseCounter, IHasProgress{
     public event EventHandler OnCut;
-    public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-    public class OnProgressChangedEventArgs : EventArgs {
-        public float progressNormalized;
-    }
+    
+    // overide the event to add the progress bar
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
     [SerializeField]
     private CuttingRecipieSO[] CuttingRecipieSOArray;
@@ -26,7 +25,7 @@ public class CuttingCounter : BaseCounter {
             cutTimes = 0;
             // fire the event to notify the progress bar
             OnProgressChanged?.Invoke(this,
-                                      new OnProgressChangedEventArgs { progressNormalized = 0f });
+                                      new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f });
         } else if (player.HasKitchenObject() && !this.HasKitchenObject()) {
             player.GetKitchenObject().SetKitchenObjectParent(this);
         }
@@ -38,7 +37,7 @@ public class CuttingCounter : BaseCounter {
             int cutRequired = GetCuttingRecipeSO(kitchenObject).cutRequired;
             // fire event to notify the progress bar
             OnProgressChanged?.Invoke(
-                this, new OnProgressChangedEventArgs { progressNormalized =
+                this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized =
                                                            (float)cutTimes / cutRequired });
             // fire event to notify animation
             OnCut?.Invoke(this, EventArgs.Empty);

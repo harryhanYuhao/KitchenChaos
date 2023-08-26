@@ -3,23 +3,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ProgressBarUI : MonoBehaviour {
-    [SerializeField]
-    private Image barImage;
+    [SerializeField] private Image barImage;
     // shall be the parent cutting counter
-    [SerializeField]
-    private CuttingCounter cuttingCounter;
+    [SerializeField] private GameObject hasProgressGameObject;
 
+    private IHasProgress iHasProgress;
     private void Start() {
-        cuttingCounter.OnProgressChanged += CuttingCounter_OnProgressChanged;
+        iHasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
+        if (iHasProgress == null) Debug.LogError("IHasProgress not found");
+        iHasProgress.OnProgressChanged += IHasProgress_OnProgressChanged;
         barImage.fillAmount = 0f;
         Hide();
     }
 
-    private void CuttingCounter_OnProgressChanged(object sender,
-                                                  CuttingCounter.OnProgressChangedEventArgs e) {
+    private void IHasProgress_OnProgressChanged(object sender,
+                                                  IHasProgress.OnProgressChangedEventArgs e) {
         barImage.fillAmount = e.progressNormalized;
         if (e.progressNormalized == 0f || e.progressNormalized == 1f) {
             Hide();
