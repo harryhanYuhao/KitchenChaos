@@ -6,11 +6,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoveCounter : BaseCounter
+public class StoveCounter : BaseCounter, IHasProgress
 {
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
     // Start is called before the first frame update
-
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
+    
     private float fryingTimer;
     
     private Animator cookingAnimator;
@@ -37,8 +38,11 @@ public class StoveCounter : BaseCounter
         if (HasKitchenObject() && HasFryingRecipeSO(GetKitchenObject()))
         {
             CookingVisualOn();
-            fryingTimer += Time.deltaTime;
             FryingRecipeSO tmp = GetFryingRecipeSO(GetKitchenObject());
+            fryingTimer += Time.deltaTime;
+            OnProgressChanged?.Invoke(
+                this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized =
+                                                           (float)fryingTimer / tmp.fryingTimeMax});
             if (fryingTimer >= tmp.fryingTimeMax)
             {
                 // fried
@@ -53,6 +57,8 @@ public class StoveCounter : BaseCounter
     public override void Interact(Player player) {
         if (!player.HasKitchenObject() && this.HasKitchenObject()) {
             kitchenObject.SetKitchenObjectParent(player);
+            OnProgressChanged?.Invoke(
+                this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0});
             CookingVisualOff();
         } else if (player.HasKitchenObject() && !this.HasKitchenObject())
         {

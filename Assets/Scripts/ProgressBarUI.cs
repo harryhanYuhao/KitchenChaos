@@ -1,9 +1,7 @@
-// This script shall be attached to the CuttingCounter_Visual, which is the child of Cutting Counter
+// This script shall be attached to an interface IHasProgress, 
+// 
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ProgressBarUI : MonoBehaviour {
@@ -23,7 +21,7 @@ public class ProgressBarUI : MonoBehaviour {
     private void IHasProgress_OnProgressChanged(object sender,
                                                   IHasProgress.OnProgressChangedEventArgs e) {
         barImage.fillAmount = e.progressNormalized;
-        if (e.progressNormalized == 0f || e.progressNormalized == 1f) {
+        if (e.progressNormalized == 0f || e.progressNormalized >= 1f) {
             Hide();
         } else {
             Show();

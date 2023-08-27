@@ -1,3 +1,5 @@
+// This interface is designed to work with ProgressBar UI. 
+// This interface shall only be used 
 using System;
 
 public interface IHasProgress
@@ -6,4 +8,6 @@ public interface IHasProgress
     public class OnProgressChangedEventArgs : EventArgs {
         public float progressNormalized;
     }
+    
+    
 }
