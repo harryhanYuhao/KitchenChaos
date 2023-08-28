@@ -92,4 +92,11 @@ public class CuttingCounter : BaseCounter, IHasProgress
         }
         return false;
     }
+    
+    // static data are not destroyed on scene change
+    // must be reset manually
+    new public static void ResetStaticData()
+    {
+        OnAnyCut = null;
+    }
 }

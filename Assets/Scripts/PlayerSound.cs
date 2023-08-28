@@ -7,7 +7,7 @@ public class PlayerSound : MonoBehaviour
     private float footStepTimer;
     private float footStepTimeMax;
     // this field shall be set to the gameSoundManager in root tree
-    [SerializeField] private SoundManager soundManager;
+    // [SerializeField] private SoundManager soundManager;
     
     private void Start()
     {
@@ -23,7 +23,7 @@ public class PlayerSound : MonoBehaviour
             if (footStepTimer >= footStepTimeMax)
             {
                 footStepTimer += footStepTimeMax;
-                soundManager.PlayPlayerFootStep(this.transform.position);
+                SoundManager.Instance.PlayPlayerFootStep(this.transform.position);
                 footStepTimer = 0;
             }
         }

@@ -136,4 +136,10 @@ public class PlateObject : KitchenObject, IKitchenObjectParent
 
         // TODO: needs to be properly implemented
         public Transform GetKitchenObjectFollowTransform() { return topPoint; }
+        
+    public static void ResetStaticData()
+    {
+        OnAddedToPlate = null;
+        OnPoppedFromPlate = null;
+    }
 }

@@ -146,4 +146,11 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
     
 
     public Transform GetKitchenObjectFollowTransform() { return playerHoldPoint; }
+    
+    public static void ResetStaticData()
+    {
+        Instance = null;
+        OnDropSomething = null;
+        OnPickSomething = null;
+    }
 }

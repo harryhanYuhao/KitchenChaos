@@ -20,6 +20,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get; private set; }
     private void Start()
     {
+        Instance = this;
         TrashCounter.onTrash += TrashCounter_onTrash;
         CuttingCounter.OnAnyCut += CuttingCounter_OnAnyCut;
         Player.OnPickSomething += Play_ObjectPickup;
