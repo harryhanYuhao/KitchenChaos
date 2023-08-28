@@ -2,6 +2,7 @@ using UnityEngine;
 
 public interface IKitchenObjectParent {
     public bool HasKitchenObject();
+    public bool HasPlate();
 
     public void ClearKitchenObject();
 

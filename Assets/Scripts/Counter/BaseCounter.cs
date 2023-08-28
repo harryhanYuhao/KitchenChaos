@@ -29,6 +29,8 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent {
     }
     public Transform GetKitchenObjectFollowTransform() { return counterTopPoint; }
     public bool HasKitchenObject() { return kitchenObject != null; }
+    public bool HasPlate() { return kitchenObject is PlateObject; }
+    public PlateObject GetPlate() { return kitchenObject as PlateObject; }
     public void ClearKitchenObject() { kitchenObject = null; }
     public void SetKitchenObject(KitchenObject kitchenObject) {
         if (kitchenObject != null) this.kitchenObject = kitchenObject;

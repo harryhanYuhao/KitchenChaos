@@ -24,8 +24,11 @@ public class KitchenObject : MonoBehaviour {
         transform.localPosition = Vector3.zero;
     }
 
-    public void DestroySelf() {
-        kitchenObjectParent.ClearKitchenObject();
+    public virtual void DestroySelf() {
+        if (kitchenObjectParent != null && (kitchenObjectParent is not PlateObject))
+        {
+            kitchenObjectParent.ClearKitchenObject();
+        }
         Destroy(gameObject);
     }
 
@@ -40,4 +43,29 @@ public class KitchenObject : MonoBehaviour {
         kitchenObject.kitchenObjectSO = inSO;
         return kitchenObjectGO;
     }
+
+    public static KitchenObject TrySpawnOnPlate(KitchenObjectSO inSO, PlateObject plate)
+    {
+        GameObject go = Instantiate(inSO.prefab);
+        KitchenObject ko = go.GetComponent<KitchenObject>();
+        if (plate.TryTransferToPlate(ko))
+        {
+            return ko;
+        }
+        ko.DestroySelf();
+        return null;
+    }
+    
+    
+    public KitchenObject TryTransferOnToPlate(PlateObject plate)
+    {
+        KitchenObject ko = this.GetComponent<KitchenObject>();
+        if (plate.TryTransferToPlate(ko))
+        {
+            return ko;
+        }
+        ko.DestroySelf();
+        return null;
+    }
+
 }

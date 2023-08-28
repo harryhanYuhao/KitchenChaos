@@ -43,6 +43,10 @@ public class ContainerCounter : BaseCounter {
             KitchenObject.SpawnKitchenObject(kitchenObjectSO, player);
             // visual
             openCloseAnimator.SetTrigger("OpenClose");
+        } 
+        else if (player.HasPlate())
+        {
+            KitchenObject.TrySpawnOnPlate(kitchenObjectSO, player.GetKitchenObject() as PlateObject);
         }
     }
 }

@@ -5,12 +5,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 public class StoveCounter : BaseCounter, IHasProgress
 {
     [SerializeField] private FryingRecipeSO[] fryingRecipeSOArray;
-    // Start is called before the first frame update
+    // conforming to IHasProgress, which is related to UI bar
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
+
+    public event EventHandler FryingStarted;
+    public event EventHandler FryingStopped;
+    
+    private bool isFrying = false;
     
     private float fryingTimer;
     
@@ -29,27 +35,37 @@ public class StoveCounter : BaseCounter, IHasProgress
         {
             if (VARIABLE ==  null) Debug.LogError("AnimateEffect"+VARIABLE.name+" not found in " + this.name);
         }
-        CookingVisualOff();
+        CookingVisualOff(this, System.EventArgs.Empty);
         fryingTimer = 0f;
+        FryingStarted += CookingVisualOn;
+        FryingStarted += SetIsFryingTrue;
+        FryingStopped += CookingVisualOff;
+        FryingStopped += SetIsFryingFalse;
     }
 
     private void Update()
     {
         if (HasKitchenObject() && HasFryingRecipeSO(GetKitchenObject()))
         {
-            CookingVisualOn();
+            if (isFrying == false)
+            {
+                FryingStarted?.Invoke(this, EventArgs.Empty);
+            }
             FryingRecipeSO tmp = GetFryingRecipeSO(GetKitchenObject());
             fryingTimer += Time.deltaTime;
             OnProgressChanged?.Invoke(
                 this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized =
-                                                           (float)fryingTimer / tmp.fryingTimeMax});
+                    (float)fryingTimer / tmp.fryingTimeMax});
             if (fryingTimer >= tmp.fryingTimeMax)
             {
                 // fried
                 fryingTimer = 0f;
                 GetKitchenObject().DestroySelf();
                 KitchenObject.SpawnKitchenObject(tmp.result, this);
-                CookingVisualOff();
+                if (isFrying == true)
+                {
+                    FryingStopped?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
     }
@@ -57,13 +73,28 @@ public class StoveCounter : BaseCounter, IHasProgress
     public override void Interact(Player player) {
         if (!player.HasKitchenObject() && this.HasKitchenObject()) {
             kitchenObject.SetKitchenObjectParent(player);
+            FryingStopped?.Invoke(this, System.EventArgs.Empty);
             OnProgressChanged?.Invoke(
                 this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0});
-            CookingVisualOff();
+            // player shall not put plate on stove
         } else if (player.HasKitchenObject() && !this.HasKitchenObject())
         {
+            if (player.HasPlate()) return;
             fryingTimer = 0f;
             player.GetKitchenObject().SetKitchenObjectParent(this);
+        } else if (player.HasKitchenObject() && this.HasKitchenObject())
+        {
+            if (player.GetKitchenObject() is not PlateObject)
+            {
+                return;
+            }
+            else // player has plate 
+            {
+                GetKitchenObject().TryTransferOnToPlate(player.GetPlate());
+                OnProgressChanged?.Invoke(
+                    this, new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0});
+                FryingStopped?.Invoke(this, System.EventArgs.Empty);
+            }
         }
     }
     
@@ -96,17 +127,25 @@ public class StoveCounter : BaseCounter, IHasProgress
         }
         return false;
     }
-    private void CookingVisualOn() {
+    private void CookingVisualOn(object sender, System.EventArgs e) {
         foreach (var VARIABLE in AnimateEffect)
         {
             VARIABLE.SetActive(true);
         }
     }
     
-    private void CookingVisualOff() {
+    private void CookingVisualOff(object sender, System.EventArgs e) {
         foreach (var VARIABLE in AnimateEffect)
         {
             VARIABLE.SetActive(false);
         }
+    }
+    
+    private void SetIsFryingTrue(object sender, System.EventArgs e) {
+        isFrying = true;
+    }
+    
+    private void SetIsFryingFalse(object sender, System.EventArgs e) {
+        isFrying = false;
     }
 }

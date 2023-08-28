@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter, IHasProgress{
+public class CuttingCounter : BaseCounter, IHasProgress
+{
+    // Sound manage subscribes to OnAnyCut
+    public static event EventHandler OnAnyCut;
     public event EventHandler OnCut;
     
     // overide the event to add the progress bar
@@ -25,9 +28,19 @@ public class CuttingCounter : BaseCounter, IHasProgress{
             cutTimes = 0;
             // fire the event to notify the progress bar
             OnProgressChanged?.Invoke(this,
-                                      new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f });
+                new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f });
         } else if (player.HasKitchenObject() && !this.HasKitchenObject()) {
-            player.GetKitchenObject().SetKitchenObjectParent(this);
+            if (player.HasPlate())
+            {
+                player.GetPlate().TryMoveLastObjectFromPlateTo(this);
+            }
+            else player.GetKitchenObject().SetKitchenObjectParent(this);
+        }
+        else if (player.HasPlate() && this.HasKitchenObject())
+        {
+            this.GetKitchenObject().TryTransferOnToPlate(player.GetPlate());
+            OnProgressChanged?.Invoke(this,
+                new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f });
         }
     }
 
@@ -41,6 +54,7 @@ public class CuttingCounter : BaseCounter, IHasProgress{
                                                            (float)cutTimes / cutRequired });
             // fire event to notify animation
             OnCut?.Invoke(this, EventArgs.Empty);
+            OnAnyCut?.Invoke(this, EventArgs.Empty);
             if (cutTimes >= cutRequired) {
                 KitchenObjectSO tmp = GetCutted(GetKitchenObject());
                 GetKitchenObject().DestroySelf();

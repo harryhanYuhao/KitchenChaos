@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent {
     public static Player Instance { get; private set; }
+    public static event EventHandler OnPickSomething;
+    public static event EventHandler OnDropSomething;
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
     public class OnSelectedCounterChangedEventArgs : EventArgs {
         public BaseCounter selectedCounter;
@@ -126,14 +128,22 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
 
     // implementing the interface IKitchenObjectParent
     public bool HasKitchenObject() { return kitchenObject != null; }
+    public bool HasPlate() { return kitchenObject is PlateObject; }
+    public PlateObject GetPlate() { return kitchenObject as PlateObject;}
 
-    public void ClearKitchenObject() { kitchenObject = null; }
+    public void ClearKitchenObject()
+    {
+        kitchenObject = null;
+        OnDropSomething?.Invoke(this, EventArgs.Empty);
+    }
 
     public void SetKitchenObject(KitchenObject kitchenObject) {
         this.kitchenObject = kitchenObject;
+        OnPickSomething?.Invoke(this, EventArgs.Empty);
     }
 
     public KitchenObject GetKitchenObject() { return kitchenObject; }
+    
 
     public Transform GetKitchenObjectFollowTransform() { return playerHoldPoint; }
 }
