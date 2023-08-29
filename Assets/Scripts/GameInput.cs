@@ -27,6 +27,8 @@ public class GameInput : MonoBehaviour {
     {
         playerInputActions.Player.Interact.performed -= Interact_performed;
         playerInputActions.Player.InteractAlternate.performed -= InteractAlternate_performed;
+        // pause is equivalent to escape
+        // TODO: rename to escape
         playerInputActions.Player.Pause.performed -= Pasue_performed;
         
         playerInputActions.Dispose();

@@ -18,6 +18,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip[] warning;
 
     public static SoundManager Instance { get; private set; }
+    
+    private float soundEffectVolumeMultiplier = 1f;
+    
     private void Start()
     {
         Instance = this;
@@ -30,12 +33,12 @@ public class SoundManager : MonoBehaviour
     }
     public void PlaySound(AudioClip clip, Vector3 position, float volume = 1f)
     {
-        AudioSource.PlayClipAtPoint(clip, position, volume);
+        AudioSource.PlayClipAtPoint(clip, position, volume*soundEffectVolumeMultiplier);
     }
 
     public void PlaySound(AudioClip[] array, Vector3 position, float volume = 1f)
     {
-        PlaySound(array[Random.Range(0, array.Length)], position, volume);
+        AudioSource.PlayClipAtPoint(array[Random.Range(0, array.Length)], position, volume*soundEffectVolumeMultiplier);
     } 
     
     private void TrashCounter_onTrash(object sender, System.EventArgs e)
@@ -64,5 +67,24 @@ public class SoundManager : MonoBehaviour
     public void PlayPlayerFootStep(Vector3 position)
     {
         PlaySound(footStep, Camera.main.transform.position, 0.2f);
+    }
+    
+    public float GetSoundEffectVolumeMultiplier()
+    {
+        return soundEffectVolumeMultiplier;
+    }
+    
+    public void SetSoundEffectVolumeMultiplier(float value)
+    {
+        soundEffectVolumeMultiplier = value;
+    }
+
+    public void LoopSoundEffectVolume()
+    {
+        soundEffectVolumeMultiplier += 0.1f;
+        if (soundEffectVolumeMultiplier > 1f)
+        {
+            soundEffectVolumeMultiplier = 0f;
+        }
     }
 }

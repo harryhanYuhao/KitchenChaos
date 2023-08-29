@@ -29,7 +29,7 @@ public class GameSceneHandler : MonoBehaviour
 
     private readonly float waitingToStartTime = 0.2f;
     private const int countDownTime = 3;
-    private const int gameTime = 10;
+    private const int gameTime = 60;
     private bool gamePaused = false;
     
     // Start is called before the first frame update
