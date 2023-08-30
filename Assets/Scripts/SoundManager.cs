@@ -1,9 +1,12 @@
 // this is the script controlling various sound effects.
 // the sound effect for stove sizzling is controled by a separate file
 // the background music is controled by the music manage (with no script)
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SoundManager : MonoBehaviour
 {
@@ -20,16 +23,21 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get; private set; }
     
     private float soundEffectVolumeMultiplier = 1f;
-    
+
+    private void Awake()
+    {
+        Instance = this;   
+    }
+
     private void Start()
     {
-        Instance = this;
         TrashCounter.onTrash += TrashCounter_onTrash;
         CuttingCounter.OnAnyCut += CuttingCounter_OnAnyCut;
         Player.OnPickSomething += Play_ObjectPickup;
         Player.OnDropSomething += Play_ObjectDrop;
         PlateObject.OnAddedToPlate += Play_ObjectPickup;
         PlateObject.OnPoppedFromPlate += Play_ObjectDrop;
+        SettingsUI.Instance.onSoundEffectVolumeBottonClicked += OnSettingUISoundEffectVolumeBottonClicked;
     }
     public void PlaySound(AudioClip clip, Vector3 position, float volume = 1f)
     {
@@ -86,5 +94,10 @@ public class SoundManager : MonoBehaviour
         {
             soundEffectVolumeMultiplier = 0f;
         }
+    }
+    
+    private void OnSettingUISoundEffectVolumeBottonClicked(object sender, EventArgs e)
+    {
+        LoopSoundEffectVolume();
     }
 }
